@@ -4,6 +4,7 @@ import { createRoot } from 'react-dom/client';
 import { useTranslation } from 'react-i18next';
 import { updateAppLanguage } from './actions/language';
 import { syncWithLocalTheme } from './actions/theme';
+import { ErrorBoundary } from './components/error-boundary';
 import { router } from './utils/routes';
 import './localization/i18n';
 
@@ -15,7 +16,11 @@ export default function App() {
     updateAppLanguage(i18n);
   }, [i18n]);
 
-  return <RouterProvider router={router} />;
+  return (
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+    </ErrorBoundary>
+  );
 }
 
 const appElement = document.getElementById('app');

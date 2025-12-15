@@ -1,10 +1,6 @@
 import path from 'node:path';
 import { app, BrowserWindow } from 'electron';
 import { ipcMain } from 'electron/main';
-import {
-  installExtension,
-  REACT_DEVELOPER_TOOLS,
-} from 'electron-devtools-installer';
 import { UpdateSourceType, updateElectronApp } from 'update-electron-app';
 import { ipcContext } from '@/ipc/context';
 import { IPC_CHANNELS } from './constants';
@@ -40,11 +36,16 @@ function createWindow() {
 }
 
 async function installExtensions() {
+  if (!inDevelopment) return;
+
   try {
+    const { default: installExtension, REACT_DEVELOPER_TOOLS } = await import(
+      'electron-devtools-installer'
+    );
     const result = await installExtension(REACT_DEVELOPER_TOOLS);
     console.log(`Extensions installed successfully: ${result.name}`);
-  } catch {
-    console.error('Failed to install extensions');
+  } catch (err) {
+    console.error('Failed to install extensions:', err);
   }
 }
 
@@ -71,9 +72,9 @@ async function setupORPC() {
 app
   .whenReady()
   .then(createWindow)
+  .then(setupORPC) // Setup IPC handler after creating window
   .then(installExtensions)
-  .then(checkForUpdates)
-  .then(setupORPC);
+  .then(checkForUpdates);
 
 //osX only
 app.on('window-all-closed', () => {
