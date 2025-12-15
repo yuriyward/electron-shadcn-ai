@@ -1,18 +1,18 @@
-import { app, BrowserWindow } from "electron";
-import path from "path";
+import path from 'node:path';
+import { app, BrowserWindow } from 'electron';
+import { ipcMain } from 'electron/main';
 import {
   installExtension,
   REACT_DEVELOPER_TOOLS,
-} from "electron-devtools-installer";
-import { ipcMain } from "electron/main";
-import { ipcContext } from "@/ipc/context";
-import { IPC_CHANNELS } from "./constants";
-import { updateElectronApp, UpdateSourceType } from "update-electron-app";
+} from 'electron-devtools-installer';
+import { UpdateSourceType, updateElectronApp } from 'update-electron-app';
+import { ipcContext } from '@/ipc/context';
+import { IPC_CHANNELS } from './constants';
 
-const inDevelopment = process.env.NODE_ENV === "development";
+const inDevelopment = process.env.NODE_ENV === 'development';
 
 function createWindow() {
-  const preload = path.join(__dirname, "preload.js");
+  const preload = path.join(__dirname, 'preload.js');
   const mainWindow = new BrowserWindow({
     width: 800,
     height: 600,
@@ -24,9 +24,9 @@ function createWindow() {
 
       preload: preload,
     },
-    titleBarStyle: process.platform === "darwin" ? "hiddenInset" : "hidden",
+    titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
     trafficLightPosition:
-      process.platform === "darwin" ? { x: 5, y: 5 } : undefined,
+      process.platform === 'darwin' ? { x: 5, y: 5 } : undefined,
   });
   ipcContext.setMainWindow(mainWindow);
 
@@ -44,7 +44,7 @@ async function installExtensions() {
     const result = await installExtension(REACT_DEVELOPER_TOOLS);
     console.log(`Extensions installed successfully: ${result.name}`);
   } catch {
-    console.error("Failed to install extensions");
+    console.error('Failed to install extensions');
   }
 }
 
@@ -52,13 +52,13 @@ function checkForUpdates() {
   updateElectronApp({
     updateSource: {
       type: UpdateSourceType.ElectronPublicUpdateService,
-      repo: "Yuriy-Babyak/fix-grammar",
+      repo: 'Yuriy-Babyak/fix-grammar',
     },
   });
 }
 
 async function setupORPC() {
-  const { rpcHandler } = await import("./ipc/handler");
+  const { rpcHandler } = await import('./ipc/handler');
 
   ipcMain.on(IPC_CHANNELS.START_ORPC_SERVER, (event) => {
     const [serverPort] = event.ports;
@@ -76,13 +76,13 @@ app
   .then(setupORPC);
 
 //osX only
-app.on("window-all-closed", () => {
-  if (process.platform !== "darwin") {
+app.on('window-all-closed', () => {
+  if (process.platform !== 'darwin') {
     app.quit();
   }
 });
 
-app.on("activate", () => {
+app.on('activate', () => {
   if (BrowserWindow.getAllWindows().length === 0) {
     createWindow();
   }

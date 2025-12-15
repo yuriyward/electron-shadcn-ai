@@ -1,13 +1,17 @@
-import { openExternalLink } from "@/actions/shell";
-import { cn } from "@/utils/tailwind";
-import { ComponentProps } from "react";
+import type { ComponentProps } from 'react';
+import { openExternalLink } from '@/actions/shell';
+import { cn } from '@/utils/tailwind';
+
+type ExternalLinkProps = Omit<ComponentProps<'button'>, 'onClick'> & {
+  href?: string;
+};
 
 export default function ExternalLink({
   children,
   className,
   href,
   ...props
-}: ComponentProps<"a">) {
+}: ExternalLinkProps) {
   function open() {
     if (!href) {
       return;
@@ -17,12 +21,16 @@ export default function ExternalLink({
   }
 
   return (
-    <a
-      className={cn("cursor-pointer underline", className)}
+    <button
+      type="button"
+      className={cn(
+        'cursor-pointer underline bg-transparent border-none p-0 text-inherit font-inherit',
+        className,
+      )}
       {...props}
       onClick={open}
     >
       {children}
-    </a>
+    </button>
   );
 }

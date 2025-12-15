@@ -1,12 +1,12 @@
-import ToggleTheme from "@/components/toggle-theme";
-import { useTranslation } from "react-i18next";
-import LangToggle from "@/components/lang-toggle";
-import { createFileRoute } from "@tanstack/react-router";
-import { SiElectron, SiReact, SiVite } from "@icons-pack/react-simple-icons";
-import NavigationMenu from "@/components/navigation-menu";
-import { getAppVersion } from "@/actions/app";
-import { useEffect, useState, useTransition } from "react";
-import ExternalLink from "@/components/external-link";
+import { SiElectron, SiReact, SiVite } from '@icons-pack/react-simple-icons';
+import { createFileRoute } from '@tanstack/react-router';
+import { useEffect, useState, useTransition } from 'react';
+import { useTranslation } from 'react-i18next';
+import { getAppVersion } from '@/actions/app';
+import ExternalLink from '@/components/external-link';
+import LangToggle from '@/components/lang-toggle';
+import NavigationMenu from '@/components/navigation-menu';
+import ToggleTheme from '@/components/toggle-theme';
 
 /*
  * Update this page to modify your home page.
@@ -16,7 +16,7 @@ import ExternalLink from "@/components/external-link";
 function HomePage() {
   const iconSize = 48;
 
-  const [appVersion, setAppVersion] = useState("0.0.0");
+  const [appVersion, setAppVersion] = useState('0.0.0');
   const [, startGetAppVersion] = useTransition();
   const { t } = useTranslation();
 
@@ -36,12 +36,12 @@ function HomePage() {
             <SiElectron size={iconSize} />
           </div>
           <span>
-            <h1 className="font-mono text-4xl font-bold">{t("appName")}</h1>
+            <h1 className="font-mono text-4xl font-bold">{t('appName')}</h1>
             <p
               className="text-muted-foreground text-end text-sm uppercase"
               data-testid="pageTitle"
             >
-              {t("titleHomePage")}
+              {t('titleHomePage')}
             </p>
           </span>
           <LangToggle />
@@ -49,10 +49,10 @@ function HomePage() {
         </div>
         <footer className="font-tomorrow text-muted-foreground flex justify-between text-[0.7rem] uppercase">
           <ExternalLink href="https://github.com/LuanRoger">
-            {t("madeBy")}
+            {t('madeBy')}
           </ExternalLink>
           <p>
-            {t("version")}: v{appVersion}
+            {t('version')}: v{appVersion}
           </p>
         </footer>
       </div>
@@ -60,6 +60,6 @@ function HomePage() {
   );
 }
 
-export const Route = createFileRoute("/")({
+export const Route = createFileRoute('/')({
   component: HomePage,
 });

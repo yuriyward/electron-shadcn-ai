@@ -1,11 +1,11 @@
-import React, { useEffect } from "react";
-import { createRoot } from "react-dom/client";
-import { syncWithLocalTheme } from "./actions/theme";
-import { useTranslation } from "react-i18next";
-import { updateAppLanguage } from "./actions/language";
-import { RouterProvider } from "@tanstack/react-router";
-import { router } from "./utils/routes";
-import "./localization/i18n";
+import { RouterProvider } from '@tanstack/react-router';
+import React, { useEffect } from 'react';
+import { createRoot } from 'react-dom/client';
+import { useTranslation } from 'react-i18next';
+import { updateAppLanguage } from './actions/language';
+import { syncWithLocalTheme } from './actions/theme';
+import { router } from './utils/routes';
+import './localization/i18n';
 
 export default function App() {
   const { i18n } = useTranslation();
@@ -18,7 +18,11 @@ export default function App() {
   return <RouterProvider router={router} />;
 }
 
-const root = createRoot(document.getElementById("app")!);
+const appElement = document.getElementById('app');
+if (!appElement) {
+  throw new Error('Root element with id "app" not found in the document');
+}
+const root = createRoot(appElement);
 root.render(
   <React.StrictMode>
     <App />

@@ -19,7 +19,9 @@
       "!.wxt",
       "!playwright-report",
       "!test-results",
-      "!tmp"
+      "!tmp",
+      "!src/styles/**/*.css",
+      "!src/routeTree.gen.ts"
     ]
   },
   "formatter": {
@@ -47,7 +49,8 @@
       "enabled": true
     },
     "parser": {
-      "cssModules": true
+      "cssModules": true,
+      "tailwindDirectives": true
     }
   },
   "javascript": {
