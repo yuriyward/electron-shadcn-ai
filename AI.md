@@ -1,120 +1,66 @@
-# AGENTS.md
+# AI.md
 
 This file provides guidance to AI agents working with this repository.
 
 ## Project Overview
 
-This is a browser extension (WXT + React 19) that intelligently cleans up messy file names. It helps users automatically rename files to descriptive, human-readable names at save time or on demand, while detecting which files actually need renaming.
+This is an Electron desktop app template for building a grammar-checking application.
 
-### Core Capabilities
-- Smart file name analysis and pattern detection
-- Suggested file names with context-aware templates
-- Auto-rename flows with undo/preview support
-- Post-download file renaming via File System Access API
-- Post-download file analysis via MediaInfo.js WASM
-- Post-download file analysis via built-in AI
-- Scoped rules per folder and project
-- Activity history and quick revert
-
-### Rename Pipeline (Two-Phase)
-- Phase 1: Instant Baseline - Synchronous, deterministic strategies
-- Phase 2: Contextual Upgrade - Asynchronous, AI-enhanced
+### Tech Stack
+- Electron (Electron Forge + Vite)
+- React 19 + TypeScript (strict)
+- TanStack Router (file-based routing under `src/routes/`)
+- Tailwind CSS v4 + shadcn/ui components under `src/components/ui/`
+- oRPC + Zod for typed IPC between renderer and main
+- Biome for linting/formatting
+- Vitest (unit) + Playwright (e2e)
 
 ## Development Commands
 
-- `bun run dev` — Start dev server
-- `bun run build` — Build for production
-- `bun run zip` — Package the extension
-- `bun run fix` — One-shot auto-fix and verify
-- `bun run verify` — Lint, type-check, and build
-- `bun run test` — Run unit tests (Vitest)
-- `bun run test:watch` — Watch mode for tests
-- `bun run coverage` — Generate coverage report
+- `bun run dev` / `bun run start` — Run the app (Electron Forge)
+- `bun run package` — Package without making installers
+- `bun run build` — Build installers (`electron-forge make`)
+- `bun run publish` — Publish (GitHub Releases)
+- `bun run fix` — Auto-fix + re-check (Biome)
+- `bun run verify` — `fix` + unit tests
+- `bun run verify-full` — `fix` + unit tests + build
+- `bun run test` — Unit tests (Vitest)
+- `bun run test:e2e` — E2E tests (Playwright)
+- `bun run docs` — Regenerate structure docs
 
-## Architecture
+## Architecture Notes
 
-Built with WXT framework and React 19, using Tailwind CSS v4. Entry points live under `entrypoints/`. Global styles are in `assets/tailwind.css`.
+### Processes and boundaries
+- Main process entry: `src/main.ts`
+- Preload entry: `src/preload.ts` (bridge-only; keep renderer isolated)
+- Renderer entry: `src/renderer.ts` / `src/App.tsx`
 
-### Key Structure
-- `background.ts` — Service worker, rules, and file-system messaging
-- `content.ts` — Content script for page integrations (optional)
-- `popup/` — UI for suggestions, previews, and actions
+### IPC (oRPC)
+- Main-side routing/handlers live under `src/ipc/`
+- Renderer-side “actions” wrappers live under `src/actions/`
+- Prefer typed schemas (`zod`) for IPC inputs/outputs; avoid ad-hoc `ipcRenderer` calls.
+- If you need to change IPC surface area, keep it minimal and update both sides in the same patch.
 
-### Tech Stack
-- WXT (`defineBackground`, `defineContentScript`)
-- React 19
-- TypeScript (strict)
-- Tailwind v4
-- Biome for lint/format
+## Conventions (Repo-Specific)
 
-### Conventions
-- `@/` alias to workspace root
-- Descriptive names; no barrel files
-- Keep files focused, <300 lines when practical
+- `@/` resolves to `src/` (see `tsconfig.json`).
+- No barrel files (`index.ts` re-exports) unless there is a strong, explicit reason (Biome enforces this).
+- Keep files focused and small; split when scope grows.
+- `src/routes/` is file-based routing; don’t hand-edit `src/routeTree.gen.ts` (generated).
 
-## Code Quality Workflow
-
-- `bun run fix` to auto-fix and verify
-- `bun run verify` before PRs
-- Resolve any linting or type errors that exist.
-
-### Development Workflow Guidelines
-
-- After each change, choose the lightest effective check:
-  - Small fixes (docs, style-only, non-behavioral refactors, test-only): run `bun run fix`.
-  - New behavior, new files/entrypoints, storage/background/manifest changes, or new dependencies: run `bun run verify`.
-  - For behavior changes, also run tests: `bun run test` (or `bun run coverage`).
-- If `verify` fails due to formatting/lints, run `bun run fix` then re-run `bun run verify`.
-- Prefer `fix` before commit and `verify` before push.
-
-## Testing
-
-- Test file naming: `**/*.test.ts(x)`
-- Commands: `bun run test`, `bun run test:watch`, `bun run coverage`.
-- WXT APIs are auto-polyfilled in tests; reset state with `fakeBrowser.reset()` in `beforeEach` when using storage or browser APIs.
-- When mocking `#imports`, mock the underlying real path (e.g., `wxt/utils/inject-script`).
-
-### Code Organization (Domain-Driven Design)
-
-- Group code by domain, not by layer or type. Examples for this project:
-  - `entrypoints/shared/renaming/` — core renaming logic (parsing, scoring, rules, preview)
-  - `entrypoints/shared/rules/` — rule storage, validation, presets
-  - `entrypoints/shared/integrations/` — OS/browser integrations and file pickers
-  - `entrypoints/shared/ui/` — UI-specific utilities and hooks
-- Avoid `index.ts` barrel files. Import from concrete files with clear boundaries.
-- Keep each file focused on a single responsibility.
-- Prefer direct imports across domains; do not create circular dependencies.
-
-### Reuse-First Development
-
-Always search before building new functionality:
-- Scan `entrypoints/shared/` for existing utilities (validation, parsing, async, dates/formatters).
-- Extend existing helpers when possible; avoid duplication.
-- If adding a new utility that could be reused, place it under the appropriate domain directory.
-
-#### File Structure Guidelines
-
+### File Structure Guidelines
 - Keep files under 300 lines; split when exceeding scope.
 - Limit to 3 concerns per file; extract helpers for clarity.
 - Extract shared logic after 2+ uses.
 
-### Storage Strategy
+## Agent Workflow
 
-- **IndexedDB** (`idb-keyval`) - File System Access handles, large blobs
-- **WXT Storage** (`storage` from WXT) - Settings, preferences, history
-
-## Static references
-
-- `WebExt-Core.md` - @webext-core patterns (messaging, storage, proxy services)
-- `ai-chrome-*.md` - Chrome Built-in AI APIs (Prompt, Summarizer, Language Detection)
-- `mediainfo-research.md` - MediaInfo.js integration patterns
-- `chrome-service-worker-long-running-tasks.md` - Alarms API for persistent operations
-
-## AI-Generated Documentation Hub
-
-The `docs/` directory hosts auto-generated structure docs.
-- `docs/FILE-STRUCTURE.md` - auto-generated from code via TypeDoc
-- Script: `bun run docs` (or `node scripts/generate-structure-docs.mjs`)
+- Resolve any linting or type errors that exist.
+- Before adding new utilities/components, search for existing ones under `src/` and extend where appropriate.
+- After code changes:
+  - `bun run fix` to auto-fix and verify
+  - Before PRs: `bun run verify`
+  - Before releases (or installer changes): `bun run verify-full`
 
 <!-- AUTO-GENERATED TREE START -->
 
