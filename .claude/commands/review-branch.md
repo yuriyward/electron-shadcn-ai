@@ -1,33 +1,30 @@
 ---
-description: Review all commits and changes in the current branch against DDD principles, CLAUDE.md rules, and maintainability best practices
+description: Review all commits and changes in the current branch against AI.md rules and maintainability best practices
 ---
 
-You are conducting a comprehensive code review of all commits in the current branch for this WXT browser extension project. Analyze all changes introduced by this branch against the project's architectural and quality standards.
+You are conducting a comprehensive code review of all commits in the current branch for this Electron (Forge + Vite) + React + TypeScript project. Analyze all changes introduced by this branch against the project's architectural and quality standards from `AI.md`.
 
 **Review Criteria:**
 
-## Domain-Driven Design (DDD) Compliance
-- **Domain Separation**: Code organized by business domain, not technical layers
-- **Direct Imports**: No re-exports through index.ts files - imports should be direct and explicit
-- **Clear Boundaries**: Each domain directory contains related functionality only
-- **Single Responsibility**: One primary purpose per file
-- **Proper Domain Structure**: Files placed in correct domain directories (automation/, network/, messaging/, user/, navigation/, storage/, hooks/, utils/)
+## Architecture & Boundaries
+- **Main / Preload / Renderer separation**: No Node/Electron APIs in renderer; keep preload as a narrow bridge.
+- **IPC discipline**: Prefer oRPC + Zod typed contracts (`src/ipc/**`, `src/actions/**`); avoid ad-hoc `ipcRenderer` usage.
+- **Routing**: Changes under `src/routes/` should respect TanStack Router conventions; don’t hand-edit `src/routeTree.gen.ts`.
 
-## CLAUDE.md Rules Compliance
-- **File Size**: Max 300 lines per file
-- **Complexity**: Max 3 concerns per file
-- **Import Patterns**: Use @/ absolute imports, proper import order (built-ins, external, internal @/, relative, styles)
-- **TypeScript**: Strict typing, avoid `any` types
-- **React 19**: Function components with explicit return types for exports
-- **WXT Framework**: Proper use of defineBackground, defineContentScript macros
-- **Extension Patterns**: Message passing for cross-script communication, background-only storage pattern
-- **Styling**: Tailwind v4 + DaisyUI components, avoid ad-hoc CSS
-- **Code Quality**: 2-space indentation, single quotes (Biome config)
+## AI.md Rules Compliance
+- **File size & scope**: Keep files under ~300 lines; keep <=3 concerns per file; extract shared logic after 2+ uses.
+- **Imports**: Prefer `@/` absolute imports; avoid barrel files/re-export `index.ts` patterns.
+- **TypeScript**: Keep strict types; avoid `any` and unsafe assertions.
+- **Styling**: Prefer Tailwind + existing UI components (`src/components/ui/`) over ad-hoc CSS.
+- **Code quality**: Biome formatting/lint rules (2-space indent, single quotes, organized imports).
 
 ## Maintainability & Best Practices
-- **Security**: No exposed secrets/keys, proper DOM safety, message validation
-- **Performance**: Bundle size awareness, lazy-loading, efficient content scripts
-- **Error Handling**: Proper error boundaries and user feedback
+- **Security (Electron)**:
+  - Avoid enabling `nodeIntegration` in renderer; keep `contextIsolation` enabled.
+  - Never load/execute remote code in the renderer.
+  - Preload should expose only minimal, explicit APIs (prefer `contextBridge`).
+- **Performance**: Avoid unnecessary IPC chatter; keep renderer work lightweight.
+- **Error Handling**: Clear error paths and user-facing feedback where appropriate.
 - **Naming**: Clear, descriptive variable and function names
 - **Dependencies**: Explicit dependency management, no hidden dependencies
 
@@ -38,9 +35,9 @@ You are conducting a comprehensive code review of all commits in the current bra
 
 **Instructions:**
 1. Get current branch name: `!git branch --show-current`
-2. Get commit history for this branch: `!git log main..HEAD --oneline`
-3. Get all changed files in this branch: `!git diff main...HEAD --name-only`
-4. Get detailed diff for all changes: `!git diff main...HEAD`
+2. Get commit history for this branch (adjust base branch if needed): `!git log main..HEAD --oneline`
+3. Get all changed files in this branch (adjust base branch if needed): `!git diff main...HEAD --name-only`
+4. Get detailed diff for all changes (adjust base branch if needed): `!git diff main...HEAD`
 5. For each changed file, read the current content to understand the final state
 6. Analyze both the changes (diff) and the final file states
 
