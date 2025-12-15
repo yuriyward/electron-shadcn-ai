@@ -1,4 +1,4 @@
-import { getCurrentThemeMode, setThemeMode, toggleThemeMode } from "./handlers";
+import { getCurrentThemeMode, setThemeMode, toggleThemeMode } from './handlers';
 
 export const theme = {
   getCurrentThemeMode,

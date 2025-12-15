@@ -1,6 +1,6 @@
-import { getPlatform } from "@/actions/app";
-import { closeWindow, maximizeWindow, minimizeWindow } from "@/actions/window";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useState } from 'react';
+import { getPlatform } from '@/actions/app';
+import { closeWindow, maximizeWindow, minimizeWindow } from '@/actions/window';
 
 interface DragWindowRegionProps {
   title?: ReactNode;
@@ -21,7 +21,7 @@ export default function DragWindowRegion({ title }: DragWindowRegionProps) {
         setPlatform(value);
       })
       .catch((error) => {
-        console.error("Failed to detect platform", error);
+        console.error('Failed to detect platform', error);
       });
 
     return () => {
@@ -29,7 +29,7 @@ export default function DragWindowRegion({ title }: DragWindowRegionProps) {
     };
   }, []);
 
-  const isMacOS = platform === "darwin";
+  const isMacOS = platform === 'darwin';
 
   return (
     <div className="flex w-screen items-stretch justify-between">

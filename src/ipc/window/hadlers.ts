@@ -1,5 +1,5 @@
-import { os } from "@orpc/server";
-import { ipcContext } from "../context";
+import { os } from '@orpc/server';
+import { ipcContext } from '../context';
 
 export const minimizeWindow = os
   .use(ipcContext.mainWindowContext)

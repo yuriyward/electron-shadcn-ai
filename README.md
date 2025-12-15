@@ -20,7 +20,6 @@ To develop a Electron app, you probably will need some UI, test, formatter, styl
 - [Prettier](https://prettier.io)
 - [ESLint 9](https://eslint.org)
 - [Zod 4](https://zod.dev)
-- [React Query (TanStack)](https://react-query.tanstack.com)
 
 ### UI 🎨
 

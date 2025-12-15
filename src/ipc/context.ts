@@ -1,5 +1,5 @@
-import { os } from "@orpc/server";
-import { BrowserWindow } from "electron";
+import { os } from '@orpc/server';
+import type { BrowserWindow } from 'electron';
 
 class IPCContext {
   public mainWindow: BrowserWindow | undefined;
@@ -10,13 +10,14 @@ class IPCContext {
 
   public get mainWindowContext() {
     if (!this.mainWindow) {
-      throw new Error("Main window is not set in IPC context.");
+      throw new Error('Main window is not set in IPC context.');
     }
 
+    const window = this.mainWindow;
     return os.middleware(({ next }) =>
       next({
         context: {
-          window: this.mainWindow!,
+          window,
         },
       }),
     );
