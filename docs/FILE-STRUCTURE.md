@@ -210,7 +210,9 @@ routeTree.gen.ts # 6 exports
 **Purpose**: Zod schemas for window IPC
 
 **Exports**:
-- `export windowActionResultSchema` - Zod schemas for window IPC
+- `export setWindowBoundsSchema` - Schema for setting window bounds
+- `export windowActionResultSchema` - Schema for window action results (void operations)
+- `export windowStateSchema` - Schema for window state values
 
 ### main.ts
 **Purpose**: Electron main process entrypoint

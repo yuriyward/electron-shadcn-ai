@@ -21,7 +21,7 @@ export function createWindow(): BrowserWindow {
       contextIsolation: true,
       nodeIntegration: false,
       nodeIntegrationInSubFrames: false,
-
+      sandbox: true,
       preload: preload,
     },
     titleBarStyle: process.platform === 'darwin' ? 'hiddenInset' : 'hidden',
