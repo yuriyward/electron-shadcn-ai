@@ -1,7 +1,7 @@
 /**
  * IPC context with main window reference
  */
-import { os } from '@orpc/server';
+import { ORPCError, os } from '@orpc/server';
 import type { BrowserWindow } from 'electron';
 
 class IPCContext {
@@ -11,19 +11,38 @@ class IPCContext {
     this.mainWindow = window;
   }
 
-  public get mainWindowContext() {
-    if (!this.mainWindow) {
-      throw new Error('Main window is not set in IPC context.');
-    }
+  /**
+   * Returns true if the main window is set and ready for use.
+   */
+  public isMainWindowReady(): boolean {
+    return this.mainWindow !== undefined;
+  }
 
-    const window = this.mainWindow;
-    return os.middleware(({ next }) =>
-      next({
+  /**
+   * Middleware that provides the main window context to IPC handlers.
+   * Instead of throwing a raw Error that could crash the main process,
+   * this throws an ORPCError which is properly handled by the oRPC framework
+   * and returned as a structured error response to the renderer.
+   */
+  public get mainWindowContext() {
+    return os.middleware(({ next }) => {
+      if (!this.mainWindow) {
+        console.warn(
+          '[IPC Context] Main window accessed before initialization. ' +
+            'Ensure setMainWindow() is called during app startup.',
+        );
+        throw new ORPCError('PRECONDITION_FAILED', {
+          message:
+            'Main window is not available. The application may still be initializing.',
+        });
+      }
+
+      return next({
         context: {
-          window,
+          window: this.mainWindow,
         },
-      }),
-    );
+      });
+    });
   }
 }
 

@@ -16,11 +16,10 @@
       "!dist",
       "!out",
       "!coverage",
-      "!.wxt",
       "!playwright-report",
       "!test-results",
       "!tmp",
-      "!src/styles/**/*.css",
+      "!src/styles/global.css",
       "!src/routeTree.gen.ts"
     ]
   },
