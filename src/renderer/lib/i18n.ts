@@ -17,14 +17,24 @@ i18n.use(initReactI18next).init({
         madeBy: 'Made by Yuriy Babyak',
       },
     },
-    'pt-BR': {
+    pl: {
       translation: {
         appName: 'fix-grammar',
-        titleHomePage: 'Página Inicial',
-        titleSecondPage: 'Segunda Página',
-        documentation: 'Documentação',
-        version: 'Versão',
-        madeBy: 'Feito por Yuriy Babyak',
+        titleHomePage: 'Strona główna',
+        titleSecondPage: 'Następna strona',
+        documentation: 'Dokumentacja',
+        version: 'Wersja',
+        madeBy: 'Przygotował Yuriy Babyak',
+      },
+    },
+    uk: {
+      translation: {
+        appName: 'fix-grammar',
+        titleHomePage: 'Головна сторінка',
+        titleSecondPage: 'Наступна сторінка',
+        documentation: 'Документація',
+        version: 'Версія',
+        madeBy: 'Створив Yuriy Babyak',
       },
     },
   },

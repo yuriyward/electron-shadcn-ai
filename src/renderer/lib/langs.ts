@@ -7,11 +7,16 @@ export default [
   {
     key: 'en',
     nativeName: 'English',
-    prefix: 'EN-US',
+    prefix: 'EN',
   },
   {
-    key: 'pt-BR',
-    nativeName: 'Português (Brasil)',
-    prefix: 'PT-BR',
+    key: 'pl',
+    nativeName: 'Polski',
+    prefix: 'PL',
+  },
+  {
+    key: 'uk',
+    nativeName: 'Українська',
+    prefix: 'UK',
   },
 ] as const satisfies Language[];
