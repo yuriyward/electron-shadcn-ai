@@ -1,10 +1,16 @@
 # electron-shadcn-ai
 
-> DDD-aligned Electron template optimized for AI-assisted development (vibe-coding)
+**DDD-aligned Electron template optimized for AI-assisted development (vibe-coding)**
 
 Fork of [electron-shadcn](https://github.com/LuanRoger/electron-shadcn) — restructured with DDD architecture and AI guidance.
 
-![Demo](https://github.com/yuriyward/electron-shadcn-ai/blob/main/images/demo.png)
+<div align="center">
+
+[![Demo Video](./blob/snapshot.png)](https://github.com/user-attachments/assets/80e102bc-bd9c-4d34-a81d-2509e0c36227)
+
+**Click to watch the demo** ▶️
+
+</div>
 
 ## ✨ Features
 
