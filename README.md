@@ -1,30 +1,18 @@
 # electron-shadcn-ai
 
-> 🔀 **Fork of [electron-shadcn](https://github.com/LuanRoger/electron-shadcn)** — Refactored and enhanced with AI-ready commands for Claude and other AI tools by [Yuriy Babyak](https://littlebit.dev)
+> DDD-aligned Electron template optimized for AI-assisted development (vibe-coding)
 
-A modern Electron template with everything you need to build beautiful, production-ready desktop applications.
+Fork of [electron-shadcn](https://github.com/LuanRoger/electron-shadcn) — restructured with DDD architecture and AI guidance.
 
 ![Demo](https://github.com/yuriyward/electron-shadcn-ai/blob/main/images/demo.png)
 
-## ✨ AI-Ready Development
+## ✨ Features
 
-This template is optimized for AI-assisted development with **unified AI instructions** that work across multiple AI coding assistants:
-
-| File | Purpose |
-|------|---------|
-| [`AI.md`](AI.md) | Main AI guidance file with architecture overview, conventions, and workflow |
-| [`AGENTS.md`](AGENTS.md) | Symlink to `AI.md` — for Cursor, Codex, Gemini, and other AI tools |
-| [`CLAUDE.md`](CLAUDE.md) | Symlink to `AI.md` — for Claude and Anthropic-based assistants |
-
-> **Unified Instructions:** All AI guidance files point to the same source (`AI.md`), ensuring consistent behavior across Claude, Cursor, Windsurf, and other AI coding assistants. Update once, apply everywhere.
-
-### AI Workflow Commands
-
-```bash
-bun run fix          # Auto-fix + re-check (Biome) — run after changes
-bun run verify       # fix + unit tests — run before PRs
-bun run verify-full  # fix + unit tests + build + docs — run before releases
-```
+- **DDD Architecture** — Clean separation: `main/`, `renderer/`, `ipc/`, `actions/`, `shared/`
+- **AI Vibe-Coding Ready** — [`AI.md`](AI.md) with architecture docs, conventions, and workflows (symlinked to `AGENTS.md`/`CLAUDE.md`)
+- **Type-Safe IPC** — oRPC + Zod for validated main↔renderer communication
+- **Modern Tooling** — Biome (10-100x faster than ESLint), Bun, TanStack Router
+- **Security First** — Context isolation enabled, nodeIntegration disabled
 
 ## 🛠️ Tech Stack
 
@@ -56,103 +44,66 @@ bun run verify-full  # fix + unit tests + build + docs — run before releases
 ### Packaging & Distribution
 - [Electron Forge](https://www.electronforge.io)
 
-## 📁 Project Structure
-
-DDD-aligned architecture with clear process boundaries:
-
-```
-src/
-├── main/           # Main process code
-├── preload/        # Preload scripts (context bridge)
-├── renderer/       # React UI code
-│   ├── components/ # Reusable UI components
-│   ├── features/   # Feature-specific modules
-│   ├── layouts/    # Layout components
-│   └── lib/        # Utilities and configuration
-├── ipc/            # IPC handlers (main-side)
-├── actions/        # IPC wrappers (renderer-side)
-├── shared/         # Cross-process types/constants
-├── routes/         # File-based routing (TanStack)
-└── styles/         # Global CSS styles
-```
-
-See [`docs/FILE-STRUCTURE.md`](docs/FILE-STRUCTURE.md) for detailed documentation.
-
-## 🚀 Getting Started
-
-### Prerequisites
-
-- [Bun](https://bun.sh) (recommended) or Node.js 18+
-
-### Installation
-
-1. Clone this repository
+## 🚀 Quick Start
 
 ```bash
 git clone https://github.com/yuriyward/electron-shadcn-ai.git
 cd electron-shadcn-ai
-```
-
-Or use it as a template on GitHub.
-
-2. Install dependencies
-
-```bash
 bun install
-```
-
-3. Run the app
-
-```bash
 bun run dev
 ```
 
-Now you can go directly to [`src/routes/index.tsx`](src/routes/index.tsx) and modify the app as you want.
+## 📁 Project Structure
+
+```
+src/
+├── main/       # Main process
+├── preload/    # Context bridge
+├── renderer/   # React UI (components, features, layouts, lib)
+├── ipc/        # IPC handlers (main-side)
+├── actions/    # IPC wrappers (renderer-side)
+├── shared/     # Cross-process types/constants
+├── routes/     # File-based routing
+└── styles/     # Global CSS
+```
+
+See [`docs/FILE-STRUCTURE.md`](docs/FILE-STRUCTURE.md) for details.
+
+## 🤖 AI-Ready Development
+
+Unified AI instructions across tools — update [`AI.md`](AI.md) once, apply everywhere:
+
+| File | For |
+|------|-----|
+| `AI.md` | Main guidance (architecture, conventions, workflows) |
+| `AGENTS.md` | Cursor, Codex, Gemini (symlink) |
+| `CLAUDE.md` | Claude/Anthropic (symlink) |
 
 ## 📋 Commands
 
 | Command | Purpose |
 |---------|---------|
-| `bun run dev` | Run the app (Electron Forge) |
-| `bun run fix` | Auto-fix + re-check (Biome) |
+| `bun run dev` | Run app |
+| `bun run fix` | Auto-fix + lint (Biome) |
 | `bun run verify` | fix + unit tests |
-| `bun run verify-full` | fix + unit tests + build + docs |
-| `bun run test` | Unit tests (Vitest) |
-| `bun run test:e2e` | E2E tests (Playwright) |
+| `bun run verify-full` | fix + tests + build + docs |
+| `bun run test` | Unit tests |
+| `bun run test:e2e` | E2E tests |
 | `bun run build` | Build installers |
 | `bun run docs` | Regenerate structure docs |
-
-## 🎯 Project Preferences
-
-- **Context isolation** enabled (security best practice)
-- **React Compiler** enabled by default
-- **Custom title bar** (`titleBarStyle: hidden`)
-- **Geist** as default font
-- Pre-configured styles in [`src/styles`](src/styles)
 
 ## 🔄 Auto Update
 
 > [!WARNING]
-> This feature only works in open-source repositories on GitHub. For private repositories, you need to set up a custom update server. Check the [Updating Applications](https://www.electronjs.org/docs/latest/tutorial/updates) section in the Electron documentation for more details.
+> Auto update works only for open-source GitHub repos. Private repos need a custom update server — see [Electron docs](https://www.electronjs.org/docs/latest/tutorial/updates).
 
-The auto update uses GitHub Releases as the source for updates. The `publish` script will automatically create a new release with the version specified in your `package.json` file. You can run the `publish` script locally to create a new release, but you need to set the `GITHUB_TOKEN` environment variable with a GitHub Personal Access Token that has permission to create releases in your repository.
-
-You can also use the GitHub Actions workflow to automatically create a new release when you push a new tag to the repository. The workflow needs to be triggered manually, but you can modify it to fit your needs. The release is created as a draft by default, so you can review and set a proper description before publishing.
-
-> Check the [`.github/workflows/publish.yml`](.github/workflows/publish.yaml) file for more details.
-
-When you open the app, it will check for updates automatically. If an update is available, it will download and install the update, then restart the app to apply it. This ensures that your users always have the latest version of your app.
-
-The auto update is implemented using [update-electron-app](https://github.com/electron/update-electron-app) to check for and apply updates. For publishing, it uses [Electron Forge's GitHub publisher](https://www.electronforge.io/config/publishers/github).
-
-## 🚀 CI/CD
-
-- Pre-configured [GitHub Actions workflow](.github/workflows/playwright.yml) for testing with Playwright
+Uses [update-electron-app](https://github.com/electron/update-electron-app) with GitHub Releases. The `publish` script creates releases (requires `GITHUB_TOKEN`). See [`.github/workflows/publish.yaml`](.github/workflows/publish.yaml).
 
 ## 📚 Documentation
 
-Check out the full documentation [here](https://docs.yuribabyak.dev/electron-shadcn-ai).
+- **This fork:** [`AI.md`](AI.md), [`docs/FILE-STRUCTURE.md`](docs/FILE-STRUCTURE.md)
+- **Upstream:** [electron-shadcn docs](https://docs.luanroger.dev/electron-shadcn) (Forge config, publishing, general Electron concepts)
 
 ## 📄 License
 
-This project is licensed under the MIT License — see the [LICENSE](LICENSE) file for details.
+MIT — see [LICENSE](LICENSE)
