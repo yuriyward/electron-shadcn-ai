@@ -11,7 +11,7 @@ export default function BaseLayout({
 }) {
   return (
     <>
-      <DragWindowRegion title="fix-grammar" />
+      <DragWindowRegion title="electron-shadcn-ai" />
       <main className="h-screen p-2 pb-20">{children}</main>
     </>
   );
