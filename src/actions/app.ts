@@ -1,4 +1,7 @@
-import { ipc } from '@/ipc/manager';
+/**
+ * App info IPC wrappers for renderer
+ */
+import { ipc } from '@/renderer/lib/ipc-manager';
 
 export function getPlatform() {
   return ipc.client.app.currentPlatfom();

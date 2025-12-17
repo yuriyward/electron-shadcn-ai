@@ -1,12 +1,15 @@
+/**
+ * Home page route component
+ */
 import { SiElectron, SiReact, SiVite } from '@icons-pack/react-simple-icons';
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getAppVersion } from '@/actions/app';
-import ExternalLink from '@/components/external-link';
-import LangToggle from '@/components/lang-toggle';
-import NavigationMenu from '@/components/navigation-menu';
-import ToggleTheme from '@/components/toggle-theme';
+import ExternalLink from '@/renderer/components/external-link';
+import LangToggle from '@/renderer/components/lang-toggle';
+import NavigationMenu from '@/renderer/components/navigation-menu';
+import ToggleTheme from '@/renderer/components/toggle-theme';
 
 /*
  * Update this page to modify your home page.
@@ -48,7 +51,7 @@ function HomePage() {
           <ToggleTheme />
         </div>
         <footer className="font-tomorrow text-muted-foreground flex justify-between text-[0.7rem] uppercase">
-          <ExternalLink href="https://github.com/LuanRoger">
+          <ExternalLink href="https://littlebit.dev">
             {t('madeBy')}
           </ExternalLink>
           <p>

@@ -11,10 +11,10 @@
     "prefix": ""
   },
   "aliases": {
-    "components": "@/components",
-    "utils": "@/utils/tailwind",
-    "ui": "@/components/ui",
-    "hooks": "@/hooks"
+    "components": "@/renderer/components",
+    "utils": "@/renderer/lib/tailwind",
+    "ui": "@/renderer/components/ui",
+    "hooks": "@/renderer/hooks"
   },
   "iconLibrary": "lucide"
 }

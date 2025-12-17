@@ -1,3 +1,6 @@
+/**
+ * IPC context with main window reference
+ */
 import { os } from '@orpc/server';
 import type { BrowserWindow } from 'electron';
 

@@ -1,5 +1,8 @@
+/**
+ * Language preference management for renderer
+ */
 import type { i18n } from 'i18next';
-import { LOCAL_STORAGE_KEYS } from '@/constants';
+import { LOCAL_STORAGE_KEYS } from '@/shared/contracts/ipc-channels';
 
 export function setAppLanguage(lang: string, i18n: i18n) {
   localStorage.setItem(LOCAL_STORAGE_KEYS.LANGUAGE, lang);

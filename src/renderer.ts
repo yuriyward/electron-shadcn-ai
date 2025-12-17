@@ -1,1 +1,4 @@
-import '@/app';
+/**
+ * Renderer process entrypoint
+ */
+import '@/renderer/app';

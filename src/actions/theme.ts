@@ -1,6 +1,9 @@
-import { LOCAL_STORAGE_KEYS } from '@/constants';
-import { ipc } from '@/ipc/manager';
-import type { ThemeMode } from '@/types/theme-mode';
+/**
+ * Theme mode management for renderer
+ */
+import { ipc } from '@/renderer/lib/ipc-manager';
+import { LOCAL_STORAGE_KEYS } from '@/shared/contracts/ipc-channels';
+import type { ThemeMode } from '@/shared/types/theme';
 
 export interface ThemePreferences {
   system: ThemeMode;
