@@ -1,7 +1,10 @@
-import { app } from './app';
-import { shell } from './shell';
-import { theme } from './theme';
-import { window } from './window';
+/**
+ * Root oRPC router combining all domains
+ */
+import { app } from './app/router';
+import { shell } from './shell/router';
+import { theme } from './theme/router';
+import { window } from './window/router';
 
 export const router = {
   theme,

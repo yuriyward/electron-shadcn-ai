@@ -1,3 +1,6 @@
+/**
+ * App info IPC handlers
+ */
 import { os } from '@orpc/server';
 import { app } from 'electron';
 

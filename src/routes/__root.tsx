@@ -1,5 +1,8 @@
+/**
+ * Root route with base layout wrapper
+ */
 import { createRootRoute, Outlet } from '@tanstack/react-router';
-import BaseLayout from '@/layouts/base-layout';
+import BaseLayout from '@/renderer/layouts/base-layout';
 
 /* import { TanStackRouterDevtools } from '@tanstack/react-router-devtools' */
 

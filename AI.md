@@ -4,127 +4,174 @@ This file provides guidance to AI agents working with this repository.
 
 ## Project Overview
 
-This is an Electron desktop app template for building a grammar-checking application.
+**Tech Stack:** Electron (Forge + Vite) • React 19 + TypeScript (strict) • TanStack Router • Tailwind CSS v4 + shadcn/ui • oRPC + Zod (typed IPC) • Biome • Vitest + Playwright
 
-### Tech Stack
-- Electron (Electron Forge + Vite)
-- React 19 + TypeScript (strict)
-- TanStack Router (file-based routing under `src/routes/`)
-- Tailwind CSS v4 + shadcn/ui components under `src/components/ui/`
-- oRPC + Zod for typed IPC between renderer and main
-- Biome for linting/formatting
-- Vitest (unit) + Playwright (e2e)
+**Related Docs:**
+- [`docs/FILE-STRUCTURE.md`](docs/FILE-STRUCTURE.md) — Detailed directory structure documentation
 
-## Development Commands
+## Quick Reference
 
-- `bun run dev` / `bun run start` — Run the app (Electron Forge)
-- `bun run package` — Package without making installers
-- `bun run build` — Build installers (`electron-forge make`)
-- `bun run publish` — Publish (GitHub Releases)
-- `bun run fix` — Auto-fix + re-check (Biome)
-- `bun run verify` — `fix` + unit tests
-- `bun run verify-full` — `fix` + unit tests + build
-- `bun run test` — Unit tests (Vitest)
-- `bun run test:e2e` — E2E tests (Playwright)
-- `bun run docs` — Regenerate structure docs
+### Commands
+| Command | Purpose |
+|---------|---------|
+| `bun run dev` | Run the app (Electron Forge) |
+| `bun run fix` | Auto-fix + re-check (Biome) |
+| `bun run verify` | fix + unit tests |
+| `bun run verify-full` | fix + unit tests + build + docs |
+| `bun run test` | Unit tests (Vitest) |
+| `bun run test:e2e` | E2E tests (Playwright) |
+| `bun run docs` | Regenerate structure docs |
+| `bun run build` | Build installers |
 
-## Architecture Notes
+### Key Paths
+| Path | Purpose |
+|------|---------|
+| `src/main/` | Main process code |
+| `src/preload/` | Preload scripts |
+| `src/renderer/` | React UI code |
+| `src/ipc/` | IPC handlers (main-side) |
+| `src/actions/` | IPC wrappers (renderer-side) |
+| `src/shared/` | Cross-process types/constants |
+| `src/routes/` | File-based routing (TanStack) |
+| `src/styles/global.css` | Global CSS styles |
 
-### Processes and boundaries
-- Main process entry: `src/main.ts`
-- Preload entry: `src/preload.ts` (bridge-only; keep renderer isolated)
-- Renderer entry: `src/renderer.ts` / `src/App.tsx`
+## Architecture Overview
 
-### IPC (oRPC)
-- Main-side routing/handlers live under `src/ipc/`
-- Renderer-side “actions” wrappers live under `src/actions/`
-- Prefer typed schemas (`zod`) for IPC inputs/outputs; avoid ad-hoc `ipcRenderer` calls.
-- If you need to change IPC surface area, keep it minimal and update both sides in the same patch.
+### Process Entry Points
+Entry files (`src/main.ts`, `src/preload.ts`, `src/renderer.ts`) should only delegate to their respective modules. All logic lives in the delegated files.
 
-## Conventions (Repo-Specific)
+### IPC Architecture (oRPC)
+- **Main-side:** `src/ipc/<domain>/` — schemas, handlers, router
+- **Renderer-side:** `src/actions/<domain>.ts` — typed wrappers
+- Both sides must evolve together; update in the same PR
 
-- `@/` resolves to `src/` (see `tsconfig.json`).
-- No barrel files (`index.ts` re-exports) unless there is a strong, explicit reason (Biome enforces this).
-- Keep files focused and small; split when scope grows.
-- `src/routes/` is file-based routing; don’t hand-edit `src/routeTree.gen.ts` (generated).
+## Process Boundaries (Mandatory)
 
-### File Structure Guidelines
-- Keep files under 300 lines; split when exceeding scope.
-- Limit to 3 concerns per file; extract helpers for clarity.
-- Extract shared logic after 2+ uses.
+### Import Rules
+| Process | May Import | Cannot Import |
+|---------|------------|---------------|
+| **Main** (`src/main/**`) | `electron`, `node:*`, `src/shared/**`, `src/ipc/**` | `src/renderer/**`, `src/preload/**`, `src/routes/**`, `src/actions/**` |
+| **Preload** (`src/preload/**`) | `electron` (contextBridge/ipcRenderer only), `src/shared/**` | `src/main/**`, `src/renderer/**`, `src/ipc/**`, `src/actions/**` |
+| **Renderer** (`src/renderer/**`, `src/routes/**`) | `react`, `src/shared/**`, `src/actions/**`, `src/renderer/**` | `src/main/**`, `src/preload/**`, `src/ipc/**`, Node/Electron APIs |
+
+### Security Posture
+- `contextIsolation: true` — **MANDATORY**, never disable
+- `nodeIntegration: false` — **MANDATORY**, never enable
+- `sandbox: true` — **RECOMMENDED** for all windows
+- All renderer-to-main communication via IPC only
+
+## Architecture Guidelines
+
+### Routes (`src/routes/`)
+Routes are **thin composition files** — layout + wiring only. Complex UI logic lives in `src/renderer/features/`.
+
+### Shared Code (`src/shared/`)
+**What goes here:** Types, constants, pure functions (no Electron/DOM dependencies)
+**What doesn't:** React components, Electron wrappers, DOM utilities
+
+## Conventions
+
+### Path Aliases
+- `@/` resolves to `src/` (see `tsconfig.json`)
+
+### File Guidelines
+- Keep files under 300 lines; split when exceeding scope
+- Limit to 3 concerns per file; extract helpers for clarity
+- Extract shared logic after 2+ uses
+- No barrel files (`index.ts` re-exports) unless explicitly needed (Biome enforces)
+
+### Component Promotion
+Keep components in feature folders until used by 2+ features, then extract to `src/renderer/components/`
+
+### Generated Files
+- `src/routeTree.gen.ts` — Auto-generated by TanStack Router; don't hand-edit
 
 ## Agent Workflow
 
-- Resolve any linting or type errors that exist.
-- Before adding new utilities/components, search for existing ones under `src/` and extend where appropriate.
-- After code changes:
-  - `bun run fix` to auto-fix and verify
-  - Before PRs: `bun run verify`
-  - Before releases (or installer changes): `bun run verify-full`
+1. **Before changes:** Search for existing utilities/components under `src/` and extend where appropriate
+2. **After changes:** Run `bun run fix` to auto-fix and verify
+3. **Before PRs:** Run `bun run verify`
+4. **Before releases:** Run `bun run verify-full`
+
+Always resolve any linting or type errors before completing a task.
+
+## Source Tree
+
+> Auto-generated by `bun run docs`. Do not edit manually.
 
 <!-- AUTO-GENERATED TREE START -->
 
 ```
 actions/ # 5 files
-  ├─ app.ts # 2 exports
-  ├─ language.ts # 2 exports
-  ├─ shell.ts # 1 export
-  ├─ theme.ts # 5 exports
-  └─ window.ts # 3 exports
-components/ # 5 files, 1 directories
-  ├─ ui/ # 4 files
-  │ ├─ button.tsx # 2 exports
-  │ ├─ navigation-menu.tsx # 9 exports
-  │ ├─ toggle-group.tsx # 2 exports
-  │ └─ toggle.tsx # 2 exports
-  ├─ drag-window-region.tsx # 1 export
-  ├─ external-link.tsx # 1 export
-  ├─ lang-toggle.tsx # 1 export
-  ├─ navigation-menu.tsx # 1 export
-  └─ toggle-theme.tsx # 1 export
-constants/ # 1 file
-  └─ index.ts # 2 exports
-ipc/ # 4 files, 4 directories
-  ├─ app/ # 2 files
-  │ ├─ handlers.ts # 2 exports
-  │ └─ index.ts # 1 export
+  ├─ app.ts # App info IPC wrappers for renderer
+  ├─ language.ts # Language preference management for renderer
+  ├─ shell.ts # Shell operations IPC wrapper for renderer
+  ├─ theme.ts # Theme mode management for renderer
+  └─ window.ts # Window control IPC wrappers for renderer
+ipc/ # 3 files, 4 directories
+  ├─ app/ # 3 files
+  │ ├─ handlers.ts # App info IPC handlers
+  │ ├─ router.ts # App domain router
+  │ └─ schemas.ts # Zod schemas for app IPC
   ├─ shell/ # 3 files
-  │ ├─ handlers.ts # 1 export
-  │ ├─ index.ts # 1 export
-  │ └─ schemas.ts # 1 export
+  │ ├─ handlers.ts # Shell operations IPC handlers
+  │ ├─ router.ts # Shell domain router
+  │ └─ schemas.ts # Zod schemas for shell IPC
   ├─ theme/ # 3 files
-  │ ├─ handlers.ts # 3 exports
-  │ ├─ index.ts # 1 export
-  │ └─ schemas.ts # 1 export
-  ├─ window/ # 2 files
-  │ ├─ hadlers.ts # 3 exports
-  │ └─ index.ts # 1 export
-  ├─ context.ts # 1 export
-  ├─ handler.ts # 1 export
-  ├─ manager.ts # 1 export
-  └─ router.ts # 1 export
-layouts/ # 1 file
-  └─ base-layout.tsx # 1 export
-localization/ # 3 files
-  ├─ i18n.ts # Module exports
-  ├─ langs.ts # 1 export
-  └─ language.ts # 1 export
+  │ ├─ handlers.ts # Theme mode IPC handlers
+  │ ├─ router.ts # Theme domain router
+  │ └─ schemas.ts # Zod schemas for theme IPC
+  ├─ window/ # 3 files
+  │ ├─ handlers.ts # Window control IPC handlers
+  │ ├─ router.ts # Window domain router
+  │ └─ schemas.ts # Zod schemas for window IPC
+  ├─ context.ts # IPC context with main window reference
+  ├─ handler.ts # oRPC handler for main process
+  └─ router.ts # Root oRPC router combining all domains
+main/ # 1 files, 1 directories
+  ├─ windows/ # 1 file
+  │ └─ main-window.ts # Main application window creation
+  └─ app.ts # Main process lifecycle and initialization
+preload/ # 1 file
+  └─ bridge.ts # IPC bridge via contextBridge
+renderer/ # 1 files, 3 directories
+  ├─ components/ # 6 files, 1 directories
+  │ ├─ ui/ # 4 files
+  │ │ ├─ button.tsx # Button component with variants (shadcn/ui)
+  │ │ ├─ navigation-menu.tsx # Navigation menu primitives (shadcn/ui)
+  │ │ ├─ toggle-group.tsx # Toggle group component (shadcn/ui)
+  │ │ └─ toggle.tsx # Toggle component with variants (shadcn/ui)
+  │ ├─ drag-window-region.tsx # Draggable title bar with window controls
+  │ ├─ error-boundary.tsx # React error boundary with recovery UI
+  │ ├─ external-link.tsx # External link button using shell API
+  │ ├─ lang-toggle.tsx # Language selection toggle group
+  │ ├─ navigation-menu.tsx # Main app navigation menu component
+  │ └─ toggle-theme.tsx # Theme toggle button component
+  ├─ layouts/ # 1 file
+  │ └─ base-layout.tsx # Base layout with title bar region
+  ├─ lib/ # 6 files
+  │ ├─ i18n.ts # i18next configuration and translations
+  │ ├─ ipc-manager.ts # IPC client manager for renderer process
+  │ ├─ langs.ts # Supported language definitions
+  │ ├─ language.ts # Language type definition
+  │ ├─ routes.ts # TanStack Router configuration
+  │ └─ tailwind.ts # Tailwind CSS class merging utility
+  └─ app.tsx # React application root and mounting
 routes/ # 2 files
-  ├─ __root.tsx # 1 export
-  ├─ index.tsx # 1 export
-  └─ second.tsx # 1 export
+  ├─ __root.tsx # Root route with base layout wrapper
+  ├─ index.tsx # Home page route component
+  └─ second.tsx # Second page route component
+shared/ # 2 directories
+  ├─ contracts/ # 1 file
+  │ └─ ipc-channels.ts # IPC channel names and storage keys
+  └─ types/ # 1 file
+    └─ theme.ts # Theme mode type definition
 tests/ # 1 directory
   └─ unit/ # 1 file
-    └─ setup.ts # Module exports
-types/ # 1 file
-  └─ theme-mode.ts # 1 export
-utils/ # 2 files
-  ├─ routes.ts # 1 export
-  └─ tailwind.ts # 1 export
-App.tsx # 1 export
-main.ts # Module exports
-preload.ts # Module exports
-renderer.ts # Module exports
+    └─ setup.ts # Vitest setup with jest-dom matchers
+main.ts # Electron main process entrypoint
+preload.ts # Preload script entrypoint
+renderer.ts # Renderer process entrypoint
 routeTree.gen.ts # 6 exports
 ```
 

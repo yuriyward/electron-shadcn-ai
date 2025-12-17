@@ -1,3 +1,6 @@
+/**
+ * Zod schemas for shell IPC
+ */
 import z from 'zod';
 
 export const openExternalLinkInputSchema = z.object({

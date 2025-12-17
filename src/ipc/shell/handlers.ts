@@ -1,3 +1,6 @@
+/**
+ * Shell operations IPC handlers
+ */
 import { os } from '@orpc/server';
 import { shell } from 'electron';
 import { openExternalLinkInputSchema } from './schemas';

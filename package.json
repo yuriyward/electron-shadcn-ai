@@ -1,7 +1,7 @@
 {
   "name": "fix-grammar",
   "productName": "fix-grammar",
-  "version": "1.2.0",
+  "version": "1.0.0",
   "description": "fix-grammar - Grammar checking application",
   "main": ".vite/build/main.js",
   "private": true,
@@ -18,7 +18,7 @@
     "check:fix": "biome check --write .",
     "fix": "bun run check:fix && bun run check",
     "verify": "bun run fix && bun run test",
-    "verify-full": "bun run fix && bun run test && bun run build",
+    "verify-full": "bun run fix && bun run test && bun run build && bun run docs",
     "docs": "node scripts/generate-structure-docs.mjs",
     "test": "vitest run",
     "test:watch": "vitest watch",

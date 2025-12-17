@@ -1,9 +1,12 @@
+/**
+ * Second page route component
+ */
 import { createFileRoute } from '@tanstack/react-router';
 import { useEffect, useState, useTransition } from 'react';
 import { useTranslation } from 'react-i18next';
 import { getAppVersion } from '@/actions/app';
-import ExternalLink from '@/components/external-link';
-import NavigationMenu from '@/components/navigation-menu';
+import ExternalLink from '@/renderer/components/external-link';
+import NavigationMenu from '@/renderer/components/navigation-menu';
 
 /*
  * You can delete this page or modify it to your needs.
