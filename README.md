@@ -1,10 +1,10 @@
-# fix-grammar
+# electron-shadcn-ai
 
 > 🔀 **Fork of [electron-shadcn](https://github.com/LuanRoger/electron-shadcn)** — Refactored and enhanced with AI-ready commands for Claude and other AI tools by [Yuriy Babyak](https://littlebit.dev)
 
 A modern Electron template with everything you need to build beautiful, production-ready desktop applications.
 
-![Demo](https://github.com/Yuriy-Babyak/fix-grammar/blob/main/images/demo.png)
+![Demo](https://github.com/yuriyward/electron-shadcn-ai/blob/main/images/demo.png)
 
 ## ✨ AI-Ready Development
 
@@ -89,8 +89,8 @@ See [`docs/FILE-STRUCTURE.md`](docs/FILE-STRUCTURE.md) for detailed documentatio
 1. Clone this repository
 
 ```bash
-git clone https://github.com/Yuriy-Babyak/fix-grammar.git
-cd fix-grammar
+git clone https://github.com/yuriyward/electron-shadcn-ai.git
+cd electron-shadcn-ai
 ```
 
 Or use it as a template on GitHub.
@@ -151,7 +151,7 @@ The auto update is implemented using [update-electron-app](https://github.com/el
 
 ## 📚 Documentation
 
-Check out the full documentation [here](https://docs.yuribabyak.dev/fix-grammar).
+Check out the full documentation [here](https://docs.yuribabyak.dev/electron-shadcn-ai).
 
 ## 📄 License
 

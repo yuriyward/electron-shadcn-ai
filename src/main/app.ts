@@ -27,7 +27,7 @@ function checkForUpdates() {
   updateElectronApp({
     updateSource: {
       type: UpdateSourceType.ElectronPublicUpdateService,
-      repo: 'Yuriy-Babyak/fix-grammar',
+      repo: 'yuriyward/electron-shadcn-ai',
     },
   });
 }

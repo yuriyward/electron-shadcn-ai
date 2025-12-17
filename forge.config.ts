@@ -27,8 +27,8 @@ const config: ForgeConfig = {
       name: '@electron-forge/publisher-github',
       config: {
         repository: {
-          owner: 'Yuriy-Babyak',
-          name: 'fix-grammar',
+          owner: 'yuriyward',
+          name: 'electron-shadcn-ai',
         },
         draft: true,
         prerelease: false,

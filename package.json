@@ -1,8 +1,8 @@
 {
-  "name": "fix-grammar",
-  "productName": "fix-grammar",
+  "name": "electron-shadcn-ai",
+  "productName": "electron-shadcn-ai",
   "version": "1.0.0",
-  "description": "fix-grammar - Grammar checking application",
+  "description": "Modern Electron template with React, shadcn/ui, and AI-ready development",
   "main": ".vite/build/main.js",
   "private": true,
   "scripts": {

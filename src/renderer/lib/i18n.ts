@@ -9,7 +9,7 @@ i18n.use(initReactI18next).init({
   resources: {
     en: {
       translation: {
-        appName: 'fix-grammar',
+        appName: 'electron-shadcn-ai',
         titleHomePage: 'Home Page',
         titleSecondPage: 'Second Page',
         documentation: 'Documentation',
@@ -19,7 +19,7 @@ i18n.use(initReactI18next).init({
     },
     pl: {
       translation: {
-        appName: 'fix-grammar',
+        appName: 'electron-shadcn-ai',
         titleHomePage: 'Strona główna',
         titleSecondPage: 'Następna strona',
         documentation: 'Dokumentacja',
@@ -29,7 +29,7 @@ i18n.use(initReactI18next).init({
     },
     uk: {
       translation: {
-        appName: 'fix-grammar',
+        appName: 'electron-shadcn-ai',
         titleHomePage: 'Головна сторінка',
         titleSecondPage: 'Наступна сторінка',
         documentation: 'Документація',
